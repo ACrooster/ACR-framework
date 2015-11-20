@@ -7,12 +7,7 @@ import (
     "net/url"
 )
 
-type Data struct {
-    School string
-    Token string
-}
-
-func GetToken(code string, data *Data) {
+func GetToken(school string, code string) string {
 
     // Variable that stores post data
     values := url.Values{}
@@ -23,7 +18,9 @@ func GetToken(code string, data *Data) {
 
     // Execute the post request
     // TODO: Make this not harcoded
-    res, err:= http.PostForm("https://" + data.School + ".zportal.nl/api/v2/oauth/token", values)
+    res, err:= http.PostForm("https://" + school + ".zportal.nl/api/v2/oauth/token", values)
+
+    token := ""
 
     // Check if an error has occurec
     if err != nil {
@@ -49,10 +46,12 @@ func GetToken(code string, data *Data) {
 	switch r := v["access_token"].(type) {
 
 	    case string:
-		data.Token = r
+		token = r
 
 	    default:
 		fmt.Println("Something went wrong")
 	}
     }
+
+    return token
 }

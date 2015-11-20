@@ -13,10 +13,8 @@ func main() {
     // NOTE: This does not work with gopherjs
     fmt.Scanln(&code)
 
-    data := new(framework.Data)
-    data.School = "amstelveencollege"
-    framework.GetToken(code, data)
+    school := "amstelveencollege"
+    token := framework.GetToken(school, code)
 
-    fmt.Println(data.School)
-    fmt.Println(data.Token)
+    fmt.Println(token)
 }
