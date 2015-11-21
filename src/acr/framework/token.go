@@ -15,11 +15,9 @@ func SetSchool(m_school string) {
     school = m_school
 }
 
-var errorCode int
-
 func GetToken(m_code string) string {
 
-    errorCode = ERROR_NONE
+    ErrorCode = ERROR_NONE
 
     // Variable that stores post data
     values := url.Values{}
@@ -55,27 +53,18 @@ func GetToken(m_code string) string {
 
 	    fmt.Print(err)
 
-	    errorCode = ERROR_UNKNOWN
+	    ErrorCode = ERROR_UNKNOWN
 	}
     } else {
 
 	if strings.Contains(err.Error(), "No address associated with hostname") {
 
-	    errorCode = ERROR_CONNECTION
+	    ErrorCode = ERROR_CONNECTION
 	} else {
 
-	    errorCode = ERROR_UNKNOWN
+	    ErrorCode = ERROR_UNKNOWN
 	}
     }
 
     return token
-}
-
-const ERROR_NONE = 0
-const ERROR_CONNECTION = 1
-const ERROR_UNKNOWN = 256
-
-func GetError() int {
-
-    return errorCode
 }
