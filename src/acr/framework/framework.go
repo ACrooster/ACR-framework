@@ -7,14 +7,21 @@ import (
     "net/url"
 )
 
-func GetToken(school string, code string) string {
+var school string
+
+func SetSchool(m_school string) {
+
+    school = m_school
+}
+
+func GetToken(m_code string) string {
 
     // Variable that stores post data
     values := url.Values{}
     // Set the type of autorisation requested
     values.Set("grant_type", "authorization_code")
     // Set the verification code
-    values.Set("code", code)
+    values.Set("code", m_code)
 
     // Execute the post request
     // TODO: Make this not harcoded

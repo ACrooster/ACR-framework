@@ -13,8 +13,9 @@ func main() {
     // NOTE: This does not work with gopherjs
     fmt.Scanln(&code)
 
-    school := "amstelveencollege"
-    token := framework.GetToken(school, code)
+    framework.SetSchool("amstelveencollege")
+
+    token := framework.GetToken(code)
 
     fmt.Println(token)
 }
