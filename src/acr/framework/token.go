@@ -9,11 +9,24 @@ import (
 )
 
 var school string
+var access_token string
 
 func SetSchool(mSchool string) {
 
     school = mSchool
 }
+
+func SetToken(token string) {
+
+    access_token = token
+}
+
+func IsStillValid() bool {
+
+    // TODO: Check if the acces token is still valid
+    return true
+}
+
 
 func IsValid(mCode string) bool {
 
@@ -36,15 +49,14 @@ func GetToken(mCode string) string {
     values.Set("code", mCode)
 
     // Execute the post request
-    // TODO: Make this not harcoded
     res, err := http.PostForm("https://" + school + ".zportal.nl/api/v2/oauth/token", values)
 
     token := ""
 
-    resByte, _ := ioutil.ReadAll(res.Body)
-
     // Check if an error has occurec
     if err == nil {
+
+	resByte, _ := ioutil.ReadAll(res.Body)
 
 	// Cleanup
 	defer res.Body.Close()
@@ -60,6 +72,7 @@ func GetToken(mCode string) string {
 	    case string:
 		token = r
 	    }
+	    // TODO: There should also be an error in case the json does not contain the correct item
 	// I assume status 400 is only send on a wrong code, as all the other syntax should be correct
 	} else if strings.Contains(string(resByte), "Status 400") {
 
@@ -83,5 +96,6 @@ func GetToken(mCode string) string {
 	}
     }
 
+    access_token = token
     return token
 }
