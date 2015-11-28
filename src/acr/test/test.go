@@ -22,7 +22,7 @@ func main() {
 
     framework.SetSchool("amstelveencollege")
     framework.SetToken("ucrer3dmolfjsl846lt58pji56")
-    framework.RequestUser()
+    framework.RequestUserData()
     fmt.Println(framework.GetName())
     fmt.Println(framework.GetId())
     framework.GetError()

@@ -1,15 +1,16 @@
 package framework
 
 import (
-    "encoding/json"
+    "github.com/jeffail/gabs"
     "strings"
     "net/http"
     "io/ioutil"
+    "fmt"
 )
 
-var jsontype jsonobject
+var userData []*gabs.Container
 
-func RequestUser() {
+func RequestUserData() {
 
     // Execute the get request
     res, err := http.Get("https://" + school + ".zportal.nl/api/v2/users/~me?access_token=" + access_token)
@@ -18,11 +19,15 @@ func RequestUser() {
     if err == nil {
 
 	resByte, _ := ioutil.ReadAll(res.Body)
+	fmt.Println("DATA:")
+	fmt.Println(string(resByte))
 
 	// Cleanup
 	defer res.Body.Close()
 
-	err := json.Unmarshal(resByte, &jsontype)
+	jsonParsed, err := gabs.ParseJSON(resByte)
+
+	userData, _ = jsonParsed.Path("response.data").Children()
 
 	// TODO: Do more error checking
 	if err != nil {
@@ -44,44 +49,17 @@ func RequestUser() {
 
 func GetId() string {
 
-    return jsontype.Response.Data[0].Code
+    return userData[0].Path("code").Data().(string)
 }
 
 func GetName() string {
 
-    p := jsontype.Response.Data[0].Prefix
+    p := userData[0].Path("prefix").Data().(string)
     if p == "" {
 
-	return jsontype.Response.Data[0].FirstName + " " + jsontype.Response.Data[0].LastName
+	return userData[0].Path("firstName").Data().(string) + " " + userData[0].Path("lastName").Data().(string)
     } else {
 
-	return jsontype.Response.Data[0].FirstName + " " + jsontype.Response.Data[0].Prefix + " " + jsontype.Response.Data[0].LastName
+	return userData[0].Path("firstName").Data().(string) + " " + p + " " + userData[0].Path("lastName").Data().(string)
     }
-}
-
-type jsonobject struct {
-    Response ResponseType
-}
-
-type ResponseType struct {
-    Status int
-    Message string
-    Details string
-    EventId int
-    StartRow int
-    EndRow int
-    TotalRows int
-    Data []DataType
-}
-
-type DataType struct {
-    Code string
-    Roles []string
-    IsStudent bool
-    IsEmployee bool
-    IsFamilyMember bool
-    FirstName string
-    Prefix string
-    LastName string
-    Archived bool
 }
