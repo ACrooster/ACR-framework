@@ -16,6 +16,7 @@ func main() {
     framework.SetSchool("amstelveencollege")
 
     token := framework.GetToken(code)
+    framework.GetError()
 
     fmt.Println(token)
 }
