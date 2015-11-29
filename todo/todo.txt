@@ -1,1 +1,2 @@
 (A) Uitzoeken hoe we dit precies moeten gebruiken vanuit javascript
+(A) HTTP -> JSON object code generaliseren

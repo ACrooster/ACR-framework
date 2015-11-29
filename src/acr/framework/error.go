@@ -10,10 +10,10 @@ var errorMsg string
 const (
 
     ERROR_NONE = iota
-    ERROR_SCHOOL = iota
-    ERROR_CONNECTION = iota
-    ERROR_CODE = iota
-    ERROR_UNKNOWN = iota
+    ERROR_SCHOOL
+    ERROR_CONNECTION
+    ERROR_CODE
+    ERROR_UNKNOWN
 )
 
 func GetError() int {

@@ -5,7 +5,6 @@ import (
     "strings"
     "net/http"
     "io/ioutil"
-    "fmt"
 )
 
 var userData []*gabs.Container
@@ -19,8 +18,6 @@ func RequestUserData() {
     if err == nil {
 
 	resByte, _ := ioutil.ReadAll(res.Body)
-	fmt.Println("DATA:")
-	fmt.Println(string(resByte))
 
 	// Cleanup
 	defer res.Body.Close()

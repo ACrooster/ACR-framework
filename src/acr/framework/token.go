@@ -8,19 +8,6 @@ import (
     "io/ioutil"
 )
 
-var school string
-var access_token string
-
-func SetSchool(mSchool string) {
-
-    school = mSchool
-}
-
-func SetToken(token string) {
-
-    access_token = token
-}
-
 func IsStillValid() bool {
 
     // TODO: Check if the acces token is still valid
