@@ -28,7 +28,7 @@ func RequestScheduleData() {
     end :=   "1448665200"
 
     // Execute the get request
-    res, err := http.Get("https://" + "amstelveencollege" + ".zportal.nl/api/v2/appointments?user=" + user + "&start=" + start + "&end=" + end + "&access_token=ucrer3dmolfjsl846lt58pji56")
+    res, err := http.Get("https://" + "amstelveencollege" + ".zportal.nl/api/v2/appointments?user=" + user + "&start=" + start + "&end=" + end + "&valid=true&access_token=ucrer3dmolfjsl846lt58pji56")
 
     // Check if an error has occurec
     if err == nil {
@@ -70,7 +70,7 @@ func GetClassCount() int {
 
 func IsClassValid(index int) bool {
 
-    return scheduleData[index].Path("valid").Data().(bool)
+    return true
 }
 
 func GetClassName(index int) string {
