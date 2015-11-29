@@ -30,11 +30,12 @@ func main() {
     fmt.Println(framework.GetName())
     fmt.Println(framework.GetId())
 
-    framework.RequestScheduleData()
+    framework.RequestScheduleData(2015, 47)
     framework.GetError()
     classCount := framework.GetClassCount()
     fmt.Println(classCount)
     for i := 0; i < classCount; i++ {
 	fmt.Println(framework.GetClassName(i) + " " + framework.GetClassStartTime(i) + " - " + framework.GetClassEndTime(i) + " " + framework.GetClassTeacher(i) + " " + framework.GetClassRoom(i) + " " + strconv.Itoa(framework.GetClassStatus(i)))
+
     }
 }

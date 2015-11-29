@@ -14,23 +14,29 @@ const (
     STATUS_CHANGED
     STATUS_CANCELLED
     STATUS_ACTIVITY
+    STATUS_EXAM
     STATUS_FREE
     STATUS_DATE
 )
 
 var scheduleData []*gabs.Container
 var classCount float64
+var year int
+var week int
 
-func RequestScheduleData() {
+func RequestScheduleData(mYear, mWeek int) {
+
+    year = mYear
+    week = mWeek
 
     user := "~me"
-    start := "1448060400"
-    end :=   "1448665200"
+    start := FirstDayOfISOWeek()
+    end := start + 604800
 
     // Execute the get request
-    res, err := http.Get("https://" + "amstelveencollege" + ".zportal.nl/api/v2/appointments?user=" + user + "&start=" + start + "&end=" + end + "&valid=true&access_token=ucrer3dmolfjsl846lt58pji56")
+    res, err := http.Get("https://" + "amstelveencollege" + ".zportal.nl/api/v2/appointments?user=" + user + "&start=" + strconv.Itoa(start) + "&end=" + strconv.Itoa(end) + "&valid=true&access_token=" + access_token)
 
-    // Check if an error has occurec
+    // Check if an error has occured
     if err == nil {
 
 	resByte, _ := ioutil.ReadAll(res.Body)
@@ -68,7 +74,46 @@ func GetClassCount() int {
     return int(classCount)
 }
 
+func GetClassStartUnix(index int) int64 {
+
+    return int64(scheduleData[index].Path("start").Data().(float64))
+}
+
+func GetClassTimeSlot(index int) int {
+
+    data := scheduleData[index].Path("startTimeSlot").Data()
+
+    if data != nil {
+
+	return int(data.(float64))
+    } else {
+
+	return 0
+    }
+}
+
+// TODO: This function is propably really crappy
 func IsClassValid(index int) bool {
+
+    bStart := scheduleData[index].Path("start").Data().(float64)
+    bEnd := scheduleData[index].Path("end").Data().(float64)
+
+    for i := 0; i < GetClassCount(); i++ {
+	if (i != index) {
+	    iStart := scheduleData[i].Path("start").Data().(float64)
+	    iEnd := scheduleData[i].Path("end").Data().(float64)
+
+	    if (bStart >= iStart && bStart < iEnd && GetClassStatus(index) == STATUS_CANCELLED) {
+
+		return false
+	    }
+
+	    if (bEnd > iStart && bEnd <= iEnd && GetClassStatus(index) == STATUS_CANCELLED) {
+
+		return false
+	    }
+	}
+    }
 
     return true
 }
@@ -122,9 +167,14 @@ func GetClassStatus(index int) int {
     var status int
     status = STATUS_NORMAL
 
-    if scheduleData[index].Path("type").Data().(string) == "activity" {
+    if scheduleData[index].Path("type").Data().(string) != "lesson" {
 
 	status = STATUS_ACTIVITY
+    }
+
+    if scheduleData[index].Path("type").Data().(string) == "exam" {
+
+	status = STATUS_EXAM
     }
 
     if scheduleData[index].Path("modified").Data().(bool) || scheduleData[index].Path("moved").Data().(bool) {
@@ -169,6 +219,53 @@ func formatTime(unixTimeStamp float64) string {
 	hr += 24
     }
 
-    return strconv.Itoa(hr) + ":" + strconv.Itoa(min)
+    if (min >= 10) {
+
+	return strconv.Itoa(hr) + ":" + strconv.Itoa(min)
+    } else {
+
+	return strconv.Itoa(hr) + ":0" + strconv.Itoa(min)
+    }
 }
 
+func FirstDayOfISOWeek() int {
+    date := time.Date(year, 0, 0, 0, 0, 0, 0, time.UTC)
+    isoYear, isoWeek := date.ISOWeek()
+
+    // iterate back to Monday
+    for date.Weekday() != time.Monday {
+	date = date.AddDate(0, 0, -1)
+	isoYear, isoWeek = date.ISOWeek()
+    }
+
+    // iterate forward to the first day of the first week
+    for isoYear < year {
+	date = date.AddDate(0, 0, 7)
+	isoYear, isoWeek = date.ISOWeek()
+    }
+
+    // iterate forward to the first day of the given week
+    for isoWeek < week {
+	date = date.AddDate(0, 0, 7)
+	isoYear, isoWeek = date.ISOWeek()
+    }
+
+    return int(date.Unix())
+}
+
+func GetDayUnix(index int) int64 {
+
+    return int64(FirstDayOfISOWeek() + 3600*24*index)
+}
+
+func GetDayNumber(index int) int {
+
+    _, _, day := time.Unix(GetDayUnix(index), 0).Date()
+    return day
+}
+
+func GetDayMonth(index int) int {
+
+    _, month, _ := time.Unix(GetDayUnix(index), 0).Date()
+    return int(month)
+}
