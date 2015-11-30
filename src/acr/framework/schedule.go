@@ -24,10 +24,9 @@ var classCount float64
 var year int
 var week int
 
-func RequestScheduleData(mYear, mWeek int) {
+func RequestScheduleData(weekUnix int64) {
 
-    year = mYear
-    week = mWeek
+    year, week = time.Unix(weekUnix, 0).ISOWeek()
 
     user := "~me"
     start := FirstDayOfISOWeek()

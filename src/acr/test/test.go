@@ -30,7 +30,7 @@ func main() {
     fmt.Println(framework.GetName())
     fmt.Println(framework.GetId())
 
-    framework.RequestScheduleData(2015, 47)
+    framework.RequestScheduleData(1448918611)
     framework.GetError()
     classCount := framework.GetClassCount()
     fmt.Println(classCount)
