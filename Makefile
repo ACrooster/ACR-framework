@@ -4,7 +4,7 @@ GO=./pkg/linux_amd64/acr/framework.a
 JS=./pkg/linux_js/acr/framework.a
 MOBILE=./framework.aar
 
-all: $(GO) $(JS) $(MOBILE)
+all: $(GO) $(MOBILE)
 
 $(GO): $(SOURCES)
 	. ./vars.sh && go install acr/framework
