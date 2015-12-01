@@ -68,6 +68,11 @@ func RequestScheduleData(weekUnix int64) {
     }
 }
 
+func GetWeek() int {
+
+    return week
+}
+
 func GetClassCount() int {
 
     return int(classCount)
