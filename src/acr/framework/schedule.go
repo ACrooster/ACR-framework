@@ -7,6 +7,7 @@ import (
     "io/ioutil"
     "time"
     "strconv"
+    // "fmt"
 )
 
 const (
@@ -29,11 +30,14 @@ func RequestScheduleData(weekUnix int64) {
     year, week = time.Unix(weekUnix, 0).ISOWeek()
 
     user := "~me"
+    // user := "vri"
     start := FirstDayOfISOWeek()
     end := start + 604800
 
     // Execute the get request
-    res, err := http.Get("https://" + "amstelveencollege" + ".zportal.nl/api/v2/appointments?user=" + user + "&start=" + strconv.Itoa(start) + "&end=" + strconv.Itoa(end) + "&valid=true&access_token=" + access_token)
+    url := "https://" + "amstelveencollege" + ".zportal.nl/api/v2/appointments?user=" + user + "&start=" + strconv.Itoa(start) + "&end=" + strconv.Itoa(end) + "&valid=true&access_token=" + access_token
+    // fmt.Println(url)
+    res, err := http.Get(url)
 
     // Check if an error has occured
     if err == nil {
@@ -127,12 +131,14 @@ func GetClassName(index int) string {
     if index < int(classCount) {
 
 	tmp, _ := scheduleData[index].Path("subjects").Children()
-	return tmp[0].Data().(string)
-    } else {
+
+	if len(tmp) != 0 {
+	    return tmp[0].Data().(string)
+	}
+    }
 
 	// TODO: This should throw an error
 	return ""
-    }
 }
 
 // TODO: These two functions could be more generic
