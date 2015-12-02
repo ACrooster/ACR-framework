@@ -20,17 +20,20 @@ const (
     STATUS_DATE
 )
 
+const MY_SCHEDULE string = "~me"
+
 var scheduleData []*gabs.Container
 var classCount float64
 var year int
 var week int
+var user string
 
-func RequestScheduleData(weekUnix int64) {
+func RequestScheduleData(weekUnix int64, mUser string) {
+
+    user = mUser
 
     year, week = time.Unix(weekUnix, 0).ISOWeek()
 
-    user := "~me"
-    // user := "vri"
     start := FirstDayOfISOWeek()
     end := start + 604800
 
@@ -70,6 +73,15 @@ func RequestScheduleData(weekUnix int64) {
 	    setError(ERROR_UNKNOWN, err.Error())
 	}
     }
+}
+
+func GetUser() string {
+
+    if user == MY_SCHEDULE {
+	return "Mijn rooster"
+    }
+
+    return user
 }
 
 func GetWeek() int {
