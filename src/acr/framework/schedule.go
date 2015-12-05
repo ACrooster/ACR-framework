@@ -7,7 +7,6 @@ import (
     "io/ioutil"
     "time"
     "strconv"
-    // "fmt"
 )
 
 const (
@@ -38,16 +37,14 @@ func RequestScheduleData(weekUnix int64, mUser string) {
     end := start + 604800
 
     // Execute the get request
-    url := "https://" + "amstelveencollege" + ".zportal.nl/api/v2/appointments?user=" + user + "&start=" + strconv.Itoa(start) + "&end=" + strconv.Itoa(end) + "&valid=true&access_token=" + access_token
-    // fmt.Println(url)
+    fields := "start,end,startTimeSlot,subjects,teachers,locations,type,modified,moved,cancelled"
+    url := "https://" + "amstelveencollege" + ".zportal.nl/api/v2/appointments?user=" + user + "&start=" + strconv.Itoa(start) + "&end=" + strconv.Itoa(end) + "&valid=true&access_token=" + access_token + "&fields=" + fields
     res, err := http.Get(url)
 
     // Check if an error has occured
     if err == nil {
 
 	resByte, _ := ioutil.ReadAll(res.Body)
-	// fmt.Println("DATA:")
-	// fmt.Println(string(resByte))
 
 	// Cleanup
 	defer res.Body.Close()
