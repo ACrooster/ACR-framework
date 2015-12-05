@@ -31,7 +31,7 @@ func RequestScheduleData(weekUnix int64, mUser string) {
 
     user = mUser
 
-    year, week = time.Unix(weekUnix, 0).ISOWeek()
+    year, week = time.Unix(weekUnix + 3600*24*2, 0).ISOWeek()
 
     start := FirstDayOfISOWeek()
     end := start + 604800
