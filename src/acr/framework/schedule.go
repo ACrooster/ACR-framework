@@ -17,6 +17,7 @@ const (
     STATUS_EXAM
     STATUS_FREE
     STATUS_DATE
+    STATUS_EMPTY
 )
 
 const MY_SCHEDULE string = "~me"
