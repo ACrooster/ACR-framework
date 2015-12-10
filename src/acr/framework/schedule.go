@@ -38,9 +38,13 @@ func RequestScheduleData(weekUnix int64, mUser string) {
     end := start + 604800
 
     // Execute the get request
-    fields := "start,end,startTimeSlot,subjects,teachers,locations,type,modified,moved,cancelled"
-    url := "https://" + "amstelveencollege" + ".zportal.nl/api/v2/appointments?user=" + user + "&start=" + strconv.Itoa(start) + "&end=" + strconv.Itoa(end) + "&valid=true&access_token=" + access_token + "&fields=" + fields
+    // NOTE: We kunnen niet vragen welke specifieke velden we willen, want bij het opvragen van docenten roosters treedt er een foutmelding op omdat we geen rechten hebben voor het bekijken van subjects
+    // fields := "start,end,startTimeSlot,subjects,teachers,locations,type,modified,moved,cancelled"
+    // url := "https://" + school + ".zportal.nl/api/v2/appointments?user=" + user + "&start=" + strconv.Itoa(start) + "&end=" + strconv.Itoa(end) + "&valid=true&access_token=" + access_token + "&fields=" + fields
+    url := "https://" + school + ".zportal.nl/api/v2/appointments?user=" + user + "&start=" + strconv.Itoa(start) + "&end=" + strconv.Itoa(end) + "&valid=true&access_token=" + access_token
     res, err := http.Get(url)
+
+    // TODO: Check if school is set
 
     // Check if an error has occured
     if err == nil {
@@ -52,8 +56,16 @@ func RequestScheduleData(weekUnix int64, mUser string) {
 
 	jsonParsed, err := gabs.ParseJSON(resByte)
 
+	var status float64
+
 	scheduleData, _ = jsonParsed.Path("response.data").Children()
+	status, _ = jsonParsed.Path("response.status").Data().(float64)
 	classCount, _ = jsonParsed.Path("response.totalRows").Data().(float64)
+
+	if status == 403 {
+
+	    setError(ERROR_RIGHTS, string(resByte))
+	}
 
 	// TODO: Do more error checking
 	if err != nil {
