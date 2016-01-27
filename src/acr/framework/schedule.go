@@ -20,7 +20,7 @@ const (
     STATUS_EMPTY
 )
 
-const MY_SCHEDULE string = "~me"
+const MY_SCHEDULE="~me"
 
 var scheduleData []*gabs.Container
 var classCount float64
@@ -86,10 +86,6 @@ func RequestScheduleData(weekUnix int64, mUser string) {
 }
 
 func GetUser() string {
-
-    if user == MY_SCHEDULE {
-	return "Mijn rooster"
-    }
 
     return user
 }
