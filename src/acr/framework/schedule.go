@@ -18,6 +18,7 @@ const (
     STATUS_FREE
     STATUS_DATE
     STATUS_EMPTY
+    STATUS_MARKER
 )
 
 const MY_SCHEDULE="~me"
@@ -103,6 +104,11 @@ func GetClassCount() int {
 func GetClassStartUnix(index int) int64 {
 
     return int64(scheduleData[index].Path("start").Data().(float64))
+}
+
+func GetClassEndUnix(index int) int64 {
+
+    return int64(scheduleData[index].Path("end").Data().(float64))
 }
 
 func GetClassTimeSlot(index int) int {
