@@ -18,7 +18,6 @@ const (
     STATUS_FREE
     STATUS_DATE
     STATUS_EMPTY
-    STATUS_MARKER
 )
 
 const MY_SCHEDULE="~me"
