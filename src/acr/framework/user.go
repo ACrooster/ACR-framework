@@ -12,7 +12,7 @@ var userData []*gabs.Container
 func RequestUserData() {
 
     // Execute the get request
-    res, err := http.Get("https://" + school + ".zportal.nl/api/v2/users/~me?access_token=" + access_token)
+    res, err := http.Get("https://" + school + ".zportal.nl/api/v3/users/~me?access_token=" + access_token)
 
     // Check if an error has occurec
     if err == nil {

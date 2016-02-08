@@ -22,7 +22,7 @@ func main() {
     // fmt.Println(token)
 
     framework.SetSchool("amstelveencollege")
-    framework.SetToken("ucrer3dmolfjsl846lt58pji56")
+    framework.SetToken("rdnn2ng1c8t2ok3jd4ss3977v9")
     framework.SetTimeDiff(1)
 
     framework.RequestUserData()

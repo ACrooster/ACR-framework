@@ -40,8 +40,8 @@ func RequestScheduleData(weekUnix int64, mUser string) {
     // Execute the get request
     // NOTE: We kunnen niet vragen welke specifieke velden we willen, want bij het opvragen van docenten roosters treedt er een foutmelding op omdat we geen rechten hebben voor het bekijken van subjects
     // fields := "start,end,startTimeSlot,subjects,teachers,locations,type,modified,moved,cancelled"
-    // url := "https://" + school + ".zportal.nl/api/v2/appointments?user=" + user + "&start=" + strconv.Itoa(start) + "&end=" + strconv.Itoa(end) + "&valid=true&access_token=" + access_token + "&fields=" + fields
-    url := "https://" + school + ".zportal.nl/api/v2/appointments?user=" + user + "&start=" + strconv.Itoa(start) + "&end=" + strconv.Itoa(end) + "&valid=true&access_token=" + access_token
+    // url := "https://" + school + ".zportal.nl/api/v3/appointments?user=" + user + "&start=" + strconv.Itoa(start) + "&end=" + strconv.Itoa(end) + "&valid=true&access_token=" + access_token + "&fields=" + fields
+    url := "https://" + school + ".zportal.nl/api/v3/appointments?user=" + user + "&start=" + strconv.Itoa(start) + "&end=" + strconv.Itoa(end) + "&valid=true&access_token=" + access_token
     res, err := http.Get(url)
 
     // TODO: Check if school is set

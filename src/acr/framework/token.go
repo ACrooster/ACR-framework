@@ -36,7 +36,7 @@ func GetToken(mCode string) string {
     values.Set("code", mCode)
 
     // Execute the post request
-    res, err := http.PostForm("https://" + school + ".zportal.nl/api/v2/oauth/token", values)
+    res, err := http.PostForm("https://" + school + ".zportal.nl/api/v3/oauth/token", values)
 
     token := ""
 
