@@ -63,5 +63,5 @@ func GetName() string {
 
 func IsEmployee() bool {
 
-    return userData[0].Path("isEmployee").Data().(bool);
+    return userData[0].Path("isEmployee").Data().(bool)
 }

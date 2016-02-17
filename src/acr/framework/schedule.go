@@ -231,6 +231,11 @@ func GetClassRoom(index int) string {
 	return tmp2
 }
 
+func GetChangeDescription(index int) string {
+
+    return scheduleData[index].Path("changeDescription").Data().(string)
+}
+
 func GetClassStatus(index int) int {
 
     var status int
