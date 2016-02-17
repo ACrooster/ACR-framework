@@ -60,3 +60,8 @@ func GetName() string {
 	return userData[0].Path("firstName").Data().(string) + " " + p + " " + userData[0].Path("lastName").Data().(string)
     }
 }
+
+func IsEmployee() bool {
+
+    return userData[0].Path("isEmployee").Data().(bool);
+}

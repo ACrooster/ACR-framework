@@ -56,15 +56,36 @@ func RequestScheduleData(weekUnix int64, mUser string) {
 
 	jsonParsed, err := gabs.ParseJSON(resByte)
 
-	var status float64
+	// TODO: This will give errors if json parsing failed
 
 	scheduleData, _ = jsonParsed.Path("response.data").Children()
-	status, _ = jsonParsed.Path("response.status").Data().(float64)
+	status, _ := jsonParsed.Path("response.status").Data().(float64)
 	classCount, _ = jsonParsed.Path("response.totalRows").Data().(float64)
 
 	if status == 403 {
 
 	    setError(ERROR_RIGHTS, string(resByte))
+	}
+
+	if classCount == 0 {
+
+	    urlUser := "https://" + school + ".zportal.nl/api/v3/users/" + user + "?access_token=" + access_token
+	    // There should be no errors, hopefully
+	    resUser, _ := http.Get(urlUser)
+
+	    resByteUser, _ := ioutil.ReadAll(resUser.Body)
+
+	    defer resUser.Body.Close()
+
+	    // Again, no errors, hopefully
+	    jsonParsedUser, _ := gabs.ParseJSON(resByteUser)
+
+	    if jsonParsedUser.Path("response.status").Data().(float64) == 404 {
+
+		setError(ERROR_USER_EXISTENCE, "The user '" + user + "' does not exist")
+	    }
+
+
 	}
 
 	// TODO: Do more error checking
@@ -171,6 +192,21 @@ func GetClassTeacher(index int) string {
 	var tmp2 string
 	for i := 0; i < len(tmp); i++ {
 	    tmp2 += strings.ToUpper(tmp[i].Data().(string))
+
+	    if i < len(tmp)-1 {
+		tmp2 += " & "
+	    }
+	}
+
+	return tmp2
+}
+
+func GetClassGroup(index int) string {
+
+	tmp, _ := scheduleData[index].Path("groups").Children()
+	var tmp2 string
+	for i := 0; i < len(tmp); i++ {
+	    tmp2 += tmp[i].Data().(string)
 
 	    if i < len(tmp)-1 {
 		tmp2 += " & "
