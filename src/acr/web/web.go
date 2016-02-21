@@ -184,7 +184,6 @@ func showSchedule() {
 
 	    schedule.AppendChild(day)
 	    day = d.CreateElement("div").(*dom.HTMLDivElement)
-	    // day.SetClass("mdl-cell")
 	}
 
 	container := d.CreateElement("div").(*dom.HTMLDivElement)
@@ -193,6 +192,7 @@ func showSchedule() {
 
 	    date := d.CreateElement("h4").(*dom.HTMLHeadingElement)
 	    date.SetTextContent(v.name)
+	    date.SetClass("date")
 
 	    container.AppendChild(date)
 	} else {
